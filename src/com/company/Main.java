@@ -1,5 +1,7 @@
 package com.company;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class Main {
@@ -22,6 +24,22 @@ public class Main {
 
         boolean result= isValidSubsequence(array,sequence);
         System.out.println(result);
+
+        String [][] competitions = {{"HTML", "C#"},{"C#", "Python"},{"Python", "HTML"}};
+
+        int []results= {0, 0, 1};
+        ArrayList<ArrayList<String>> competition = new ArrayList<>();
+        for (String[] a: competitions){
+            ArrayList<String> temp= new ArrayList<>(Arrays.asList(a));
+            competition.add(temp);
+        }
+        ArrayList<Integer> resulting= new ArrayList<Integer>();
+        for (int item: results){
+            resulting.add(item);
+        }
+        String output=tournamentWinner(competition,resulting);
+        System.out.printf("This is supposed to be the result if it is correctly working: %s",output);
+
 
     }
     public static void swap (int[]array,int i, int j){
@@ -48,7 +66,9 @@ public class Main {
 
             System.out.println(Arrays.toString(array));
             System.out.println(i);
-            }
+
+
+        }
         }
     //this is not a perfectly working code but is essentially good enough implementation for the isvalidsubsequence problem for algoexpert
     //easy
@@ -56,6 +76,7 @@ public class Main {
 
             int[] order1=new int[sequence.size()];
             int[] order2 =new int [sequence.size()];
+            Arrays.fill(order1,Integer.MIN_VALUE);
             int indexer=0;
             boolean still= true;
             for (int i=0;i< sequence.size();i++){
@@ -81,11 +102,52 @@ public class Main {
             }
     }
 
+    public static String tournamentWinner(
+            ArrayList<ArrayList<String>> competitions, ArrayList<Integer> results) {
+        // Write your code here.
+        int counter=0;
+        String[] store = new String[competitions.size()];
+        for (var item: competitions){
+            if (results.get(counter)==0){
+                store[counter]=item.get(1);}
+            else{
+                store[counter]=item.get(0);
+            }
+            counter++;
+        }
+        if (store.length==1)return store[0];
+        System.out.println(Arrays.toString(store));
+        int count=1;
+        int iter=0;
+        int j;
+        String[][] winner = new String[counter][2];
+        for (int i =0;i<store.length-1;i++){
+            count=1;
+            for ( j = i+1;j<store.length; j++){
+                System.out.println(store[i]==store[j]);
+                if (store[i].equals(store[j])){
+                    ++count;
+                    winner[i][0]=store[j];
+                    winner[i][1]=Integer.toString(count);
+                }
+            }
+        }
+        String to_return="";
+        int max = Integer.MIN_VALUE;
+        for (var arr: winner){
+            if (arr[1]!=null){
+                System.out.println(Arrays.toString(arr));
 
+                int comparer = Integer.parseInt(arr[1]);
 
-
-
-
+                if (comparer>max){
+                    max = comparer;
+                    to_return= arr[0];
+                }
+            }
+        }
+        return to_return;
     }
+}
 
 
